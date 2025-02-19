@@ -44,3 +44,38 @@ At i=2, 1 is the only possible mode of [1,1].
 At i=3, 1 is the only possible mode of [1,1,2].
 At i=4, 1 or 2 are both modes of [1,1,2,2]. Since ai=2, this array is valid.
 */ 
+
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    set<int> s;
+    for (int i = 0; i < n; i++) {
+        s.insert(i + 1);
+    }
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        if (s.find(a[i]) != s.end()) {
+            cout << a[i] << " ";
+            s.erase(a[i]);
+        } else {
+            cout << *s.begin() << " ";
+            s.erase(s.begin());
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
