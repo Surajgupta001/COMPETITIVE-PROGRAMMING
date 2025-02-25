@@ -49,3 +49,66 @@ The second list contains subsets of four sticks that can form rectangles with si
 You can choose any four of the 5 given sticks from the third list, they will form a square with side 5, which is still a rectangle with sides (5,5)
 
 */ 
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <map>
+using namespace std;
+
+// Calculate the value of p^2/s
+double calculateRation(int l1, int l2){
+    return pow(2 * (l1 + l2), 2) / (1.0 * l1 * l2);
+}
+
+int main(){
+    int t; // testcase
+    cin>>t;
+
+    while(t-- > 0){
+        int n; // stick
+        cin>>n;
+
+        map<int,int>freq; // store the frequency of each stick length
+
+        for(int i = 0; i < n; i++){
+            int l; // length of stick
+            cin>>l;
+            freq[l]++;
+        }
+
+        // Store pairs of stick lengths that can perform a reactangle
+        vector<pair<int,int>>makes_pairs;
+
+        // find pairs of stick length that can form a rectangle
+        for(auto pair : freq){
+            if(pair.second > 1) makes_pairs.push_back(pair);
+        }
+
+        int len1 = -1;
+        int len2 = -1;
+
+        // check if there is a stack length that appears more than three times
+        for(auto pair : makes_pairs){
+            if(pair.second > 3){
+                len1 = len2 = pair.first;
+                break;
+            }
+        }
+
+        // If no such stick length is found, find the pair that minimize p^2/s
+        if(len1 == -1 and len2 == -1){
+            double min_ratio = 1e9;
+            for(int i=1; i<makes_pairs.size(); i++){
+                double ratio = calculateRation(makes_pairs[i].first, makes_pairs[i-1].first);
+                if(ratio < min_ratio){
+                    min_ratio = ratio;
+                    len1 = makes_pairs[i].first;
+                    len2 = makes_pairs[i-1].first;
+                }
+            }
+        }
+        cout<<len1<<" "<<len1<<" "<<len2<<" "<<len2<<" "<<endl;
+    }
+    return 0;
+}
